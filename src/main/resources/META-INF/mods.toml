@@ -1,0 +1,10 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+[[mods]]
+modId="stackmodify"
+version="${file.jarVersion}"
+displayName="Stackmodify"
+authors="Jummit"
+description='''
+Change the stack size of items
+'''
