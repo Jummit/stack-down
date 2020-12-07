@@ -1,6 +1,8 @@
 package com.jummit.stackmodify;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,15 +22,19 @@ public class StackSizeModifier {
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 
+	private static final Map<Item, Integer> originalStackSizes = new HashMap<Item, Integer>();
+
 	public static void modifyStackSizes() {
 		Field maxStackSize = ObfuscationReflectionHelper.findField(Item.class, "field_200920_a");
 		maxStackSize.setAccessible(true);
 		Registry.ITEM.forEach((item) -> {
 			int newSize = getModifiedStackSize(item);
-			if (newSize == item.getMaxStackSize()) {
-				return;
+			if (!originalStackSizes.containsKey(item)) {
+				originalStackSizes.put(item, item.getMaxStackSize());
 			}
-			LOGGER.debug("Setting stack size of " + item + " to " + newSize);
+			if (newSize != originalStackSizes.get(item)) {
+				LOGGER.debug("Setting stack size of " + item + " to " + newSize);
+			}
 			try {
 				maxStackSize.set(item, newSize);
 			} catch (IllegalArgumentException e) {
@@ -43,7 +49,7 @@ public class StackSizeModifier {
 		for (String config : StackModifyConfig.COMMON.stackSizes.get()) {
 			Matcher matcher = Pattern.compile("^(.+)([*=+-/])(\\d+)$").matcher(config);
 			if (matcher.matches() && ItemMatchUtils.match(matcher.group(1), item)) {
-				return StringOperaterUtils.calculate(item.getMaxStackSize(), Integer.parseInt(matcher.group(2)), matcher.group(2));
+				return StringOperaterUtils.calculate(item.getMaxStackSize(), Integer.parseInt(matcher.group(3)), matcher.group(2));
 			}
 		}
 
