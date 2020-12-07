@@ -28,10 +28,10 @@ public class StackSizeModifier {
 		Field maxStackSize = ObfuscationReflectionHelper.findField(Item.class, "field_200920_a");
 		maxStackSize.setAccessible(true);
 		Registry.ITEM.forEach((item) -> {
+			originalStackSizes.put(item, item.getMaxStackSize());
+		});
+		Registry.ITEM.forEach((item) -> {
 			int newSize = getModifiedStackSize(item);
-			if (!originalStackSizes.containsKey(item)) {
-				originalStackSizes.put(item, item.getMaxStackSize());
-			}
 			if (newSize != originalStackSizes.get(item)) {
 				LOGGER.debug("Setting stack size of " + item + " to " + newSize);
 			}
@@ -48,7 +48,7 @@ public class StackSizeModifier {
 	private static int getModifiedStackSize(Item item) {
 		for (String config : StackModifyConfig.COMMON.stackSizes.get()) {
 			Matcher matcher = Pattern.compile("^(.+)([*=+-/])(\\d+)$").matcher(config);
-			if (matcher.matches() && ItemMatchUtils.match(matcher.group(1), item)) {
+			if (matcher.matches() && ItemMatchUtils.match(matcher.group(1), item, originalStackSizes)) {
 				return StringOperaterUtils.calculate(originalStackSizes.get(item), Integer.parseInt(matcher.group(3)), matcher.group(2));
 			}
 		}

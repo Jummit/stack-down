@@ -1,5 +1,6 @@
 package com.jummit.stackmodify.util;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.math.NumberUtils;
@@ -9,8 +10,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class ItemMatchUtils {
 	
-	public static Boolean match(String pattern, Item item) {
-		return NumberUtils.isCreatable(pattern) && item.getMaxStackSize() == Integer.parseInt(pattern) ||
+	public static Boolean match(String pattern, Item item, Map<Item, Integer> originalStackSizes) {
+		return NumberUtils.isCreatable(pattern) && originalStackSizes.get(item) == Integer.parseInt(pattern) ||
 				item.getRegistryName().getNamespace() == pattern ||
 				item.getRegistryName().toString() == pattern ||
 				ResourceLocation.isResouceNameValid(pattern) && item.getTags().contains(new ResourceLocation(pattern)) ||
