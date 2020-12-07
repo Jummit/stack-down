@@ -25,7 +25,7 @@ public class StackSizeModifier {
 	private static final Map<Item, Integer> originalStackSizes = new HashMap<Item, Integer>();
 
 	public static void modifyStackSizes() {
-		Field maxStackSize = ObfuscationReflectionHelper.findField(Item.class, "field_200920_a");
+		Field maxStackSize = ObfuscationReflectionHelper.findField(Item.class, "field_77777_bU");
 		maxStackSize.setAccessible(true);
 		Registry.ITEM.forEach((item) -> {
 			originalStackSizes.put(item, item.getMaxStackSize());
