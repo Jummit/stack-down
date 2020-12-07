@@ -49,7 +49,7 @@ public class StackSizeModifier {
 		for (String config : StackModifyConfig.COMMON.stackSizes.get()) {
 			Matcher matcher = Pattern.compile("^(.+)([*=+-/])(\\d+)$").matcher(config);
 			if (matcher.matches() && ItemMatchUtils.match(matcher.group(1), item)) {
-				return StringOperaterUtils.calculate(item.getMaxStackSize(), Integer.parseInt(matcher.group(3)), matcher.group(2));
+				return StringOperaterUtils.calculate(originalStackSizes.get(item), Integer.parseInt(matcher.group(3)), matcher.group(2));
 			}
 		}
 
@@ -59,10 +59,10 @@ public class StackSizeModifier {
 			if (matcher.group(1).isEmpty()) {
 				return Integer.parseInt(matcher.group(2));
 			} else {
-				return StringOperaterUtils.calculate(item.getMaxStackSize(), Integer.parseInt(matcher.group(2)), matcher.group(1));
+				return StringOperaterUtils.calculate(originalStackSizes.get(item), Integer.parseInt(matcher.group(2)), matcher.group(1));
 			}
 		}
 
-		return item.getMaxStackSize();
+		return originalStackSizes.get(item);
 	}
 }
