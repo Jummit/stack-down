@@ -23,7 +23,7 @@ public class StackSizeModifier {
 	public static void modifyStackSizes() {
 		Field maxStackSize = ObfuscationReflectionHelper.findField(Item.class, "field_200920_a");
 		maxStackSize.setAccessible(true);
-		Registry.ITEM.iterator().forEachRemaining((item) -> {
+		Registry.ITEM.forEach((item) -> {
 			int newSize = getModifiedStackSize(item);
 			if (newSize == item.getMaxStackSize()) {
 				return;
