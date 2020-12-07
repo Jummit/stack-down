@@ -1,6 +1,6 @@
-package com.jummit.stackmodify;
+package com.jummit.stackdown;
 
-import com.jummit.stackmodify.config.StackModifyConfig;
+import com.jummit.stackdown.config.StackDownConfig;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,15 +11,15 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 
-@Mod(StackModify.MOD_ID)
-@Mod.EventBusSubscriber(modid = StackModify.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class StackModify
+@Mod(StackDown.MOD_ID)
+@Mod.EventBusSubscriber(modid = StackDown.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class StackDown
 {
-	public static final String MOD_ID = "stackmodify";
+	public static final String MOD_ID = "stackdown";
 	private static final Logger LOGGER = LogManager.getLogger();
 
-    public StackModify() {
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, StackModifyConfig.COMMON_SPEC);
+    public StackDown() {
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, StackDownConfig.COMMON_SPEC);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 

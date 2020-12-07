@@ -1,10 +1,10 @@
 modLoader="javafml"
 loaderVersion="[31,)"
 [[mods]]
-modId="stackmodify"
+modId="stackdown"
 version="${file.jarVersion}"
-displayName="Stackmodify"
+displayName="StackDown"
 authors="Jummit"
 description='''
-Change the stack size of items
+Set or modify the max stack size of items with a config.
 '''

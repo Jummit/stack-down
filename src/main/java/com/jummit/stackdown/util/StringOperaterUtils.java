@@ -1,4 +1,4 @@
-package com.jummit.stackmodify.util;
+package com.jummit.stackdown.util;
 
 public class StringOperaterUtils {
 	

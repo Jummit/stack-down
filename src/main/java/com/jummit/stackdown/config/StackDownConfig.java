@@ -1,4 +1,4 @@
-package com.jummit.stackmodify.config;
+package com.jummit.stackdown.config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 
-public class StackModifyConfig {
+public class StackDownConfig {
 	
 	public static final CommonConfig COMMON;
 	public static final ForgeConfigSpec COMMON_SPEC;

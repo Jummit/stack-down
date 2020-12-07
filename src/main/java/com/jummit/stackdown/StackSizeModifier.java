@@ -1,4 +1,4 @@
-package com.jummit.stackmodify;
+package com.jummit.stackdown;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.jummit.stackmodify.config.StackModifyConfig;
-import com.jummit.stackmodify.util.ItemMatchUtils;
-import com.jummit.stackmodify.util.StringOperaterUtils;
+import com.jummit.stackdown.config.StackDownConfig;
+import com.jummit.stackdown.util.ItemMatchUtils;
+import com.jummit.stackdown.util.StringOperaterUtils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,14 +46,14 @@ public class StackSizeModifier {
 	}
 
 	private static int getModifiedStackSize(Item item) {
-		for (String config : StackModifyConfig.COMMON.stackSizes.get()) {
+		for (String config : StackDownConfig.COMMON.stackSizes.get()) {
 			Matcher matcher = Pattern.compile("^(.+)([*=+-/])(\\d+)$").matcher(config);
 			if (matcher.matches() && ItemMatchUtils.match(matcher.group(1), item, originalStackSizes)) {
 				return StringOperaterUtils.calculate(originalStackSizes.get(item), Integer.parseInt(matcher.group(3)), matcher.group(2));
 			}
 		}
 
-		String config = item instanceof BlockItem ? StackModifyConfig.COMMON.blockStackSize.get() : StackModifyConfig.COMMON.itemStackSize.get();
+		String config = item instanceof BlockItem ? StackDownConfig.COMMON.blockStackSize.get() : StackDownConfig.COMMON.itemStackSize.get();
 		Matcher matcher = Pattern.compile("^([*+-/]?)(\\d+)$").matcher(config);
 		if (matcher.matches()) {
 			if (matcher.group(1).isEmpty()) {
