@@ -15,7 +15,6 @@ public class ItemMatchUtils {
 				item.getRegistryName().getNamespace() == pattern ||
 				item.getRegistryName().toString() == pattern ||
 				item.getTags().contains(new ResourceLocation(pattern)) ||
-				pattern.startsWith("(") && pattern.endsWith(")") && Pattern.compile(pattern.substring(1, -2)).matcher(item.getRegistryName().toString()).matches();
+				pattern.startsWith("\\") && pattern.endsWith("\\") && Pattern.compile(pattern.substring(1, -2)).matcher(item.getRegistryName().toString()).matches();
 	}
-
 }

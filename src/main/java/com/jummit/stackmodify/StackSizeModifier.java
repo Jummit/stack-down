@@ -1,10 +1,12 @@
 package com.jummit.stackmodify;
 
 import java.lang.reflect.Field;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.jummit.stackmodify.config.StackModifyConfig;
 import com.jummit.stackmodify.util.ItemMatchUtils;
-import com.jummit.stackmodify.util.NumberModifierUtils.NumberModifier;
+import com.jummit.stackmodify.util.StringOperaterUtils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,48 +20,43 @@ public class StackSizeModifier {
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	public static void modifyStackSizes(NumberModifier[] modifiers) {
+	public static void modifyStackSizes() {
 		Field maxStackSize = ObfuscationReflectionHelper.findField(Item.class, "field_200920_a");
 		maxStackSize.setAccessible(true);
 		Registry.ITEM.iterator().forEachRemaining((item) -> {
-			StackModifyConfig.COMMON.stackSizes.get().forEach((stackSize) -> {
-				String[] split = null;
-				NumberModifier numberModifier = null;
-				for (int i = 0; i < modifiers.length; i++) {
-					NumberModifier numberModifierObject = modifiers[i];
-					String modifier = numberModifierObject.getModifier();
-					if (stackSize.contains(modifier)) {
-						split = stackSize.split(modifier);
-						numberModifier = numberModifierObject;
-					}
-				}
-				if (split == null || numberModifier == null) {
-					return;
-				}
-				if (split.length < 2) {
-					return;
-				}
-				String itemPattern = split[0];
-				String stackSizeModifier = split[1];
-				String modifier;
-				if (ItemMatchUtils.match(itemPattern, item)) {
-					modifier = stackSizeModifier;
-				} else if (item instanceof BlockItem) {
-					modifier = StackModifyConfig.COMMON.blockStackSize.get();
-				} else {
-					modifier = StackModifyConfig.COMMON.itemStackSize.get();
-				}
-				try {
-					LOGGER.debug("Modifying stack size of " + item);
-					maxStackSize.set(item, numberModifier.modify(item.getMaxStackSize(), Integer.parseInt(modifier)));
-				} catch (NumberFormatException e) {
-					LOGGER.error("Invalid number format in stack size config");
-				} catch (IllegalArgumentException e) {
-					LOGGER.error(e);
-				} catch (IllegalAccessException e) {
-					LOGGER.error(e);
-				}
-			});
+			int newSize = getModifiedStackSize(item);
+			if (newSize == item.getMaxStackSize()) {
+				return;
+			}
+			LOGGER.debug("Setting stack size of " + item + " to " + newSize);
+			try {
+				maxStackSize.set(item, newSize);
+			} catch (IllegalArgumentException e) {
+				LOGGER.error(e);
+			} catch (IllegalAccessException e) {
+				LOGGER.error(e);
+			}
 		});
+	}
+
+	private static int getModifiedStackSize(Item item) {
+		for (String config : StackModifyConfig.COMMON.stackSizes.get()) {
+			Matcher matcher = Pattern.compile("^(.+)([*=+-/])(\\d+)$").matcher(config);
+			if (matcher.matches() && ItemMatchUtils.match(matcher.group(1), item)) {
+				return StringOperaterUtils.calculate(item.getMaxStackSize(), Integer.parseInt(matcher.group(2)), matcher.group(2));
+			}
+		}
+
+		String config = item instanceof BlockItem ? StackModifyConfig.COMMON.blockStackSize.get() : StackModifyConfig.COMMON.itemStackSize.get();
+		Matcher matcher = Pattern.compile("^([*+-/]?)(\\d+)$").matcher(config);
+		if (matcher.matches()) {
+			if (matcher.group(1).isEmpty()) {
+				return Integer.parseInt(matcher.group(2));
+			} else {
+				return StringOperaterUtils.calculate(item.getMaxStackSize(), Integer.parseInt(matcher.group(2)), matcher.group(1));
+			}
+		}
+
+		return item.getMaxStackSize();
 	}
 }
