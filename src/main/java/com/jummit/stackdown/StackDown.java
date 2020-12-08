@@ -27,11 +27,13 @@ public class StackDown
     static void onLoad(final ModConfig.Loading configEvent) {
 		LOGGER.info("Loading stack size config");
 		StackSizeModifier.modifyStackSizes();
+		LOGGER.info("Loading complete");
     }
 
     @SubscribeEvent
     public static void onReload(ModConfig.Reloading configEvent) {
 		LOGGER.info("Reloading stack size config");
 		StackSizeModifier.modifyStackSizes();
+		LOGGER.info("Reloading complete");
     }
 }
