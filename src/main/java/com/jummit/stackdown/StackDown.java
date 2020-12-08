@@ -26,7 +26,7 @@ public class StackDown
 	@SubscribeEvent
     static void onLoad(final ModConfig.Loading configEvent) {
 		LOGGER.info("Loading stack size config");
-		StackSizeModifier.modifyStackSizes();
+		StackSizeModifier.init();
 		LOGGER.info("Loading complete");
     }
 

@@ -24,12 +24,16 @@ public class StackSizeModifier {
 
 	private static final Map<Item, Integer> originalStackSizes = new HashMap<Item, Integer>();
 
-	public static void modifyStackSizes() {
+	public static void init() {
 		Field maxStackSize = ObfuscationReflectionHelper.findField(Item.class, "field_77777_bU");
 		maxStackSize.setAccessible(true);
 		Registry.ITEM.forEach((item) -> {
 			originalStackSizes.put(item, item.getMaxStackSize());
 		});
+	}
+
+	public static void modifyStackSizes() {
+		Field maxStackSize = ObfuscationReflectionHelper.findField(Item.class, "field_77777_bU");
 		Registry.ITEM.forEach((item) -> {
 			int newSize = getModifiedStackSize(item);
 			if (newSize != originalStackSizes.get(item)) {
