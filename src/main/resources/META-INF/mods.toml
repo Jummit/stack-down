@@ -1,5 +1,7 @@
 modLoader="javafml"
 loaderVersion="[31,)"
+license="MIT"
+issueTrackerURL="https://github.com/Jummit/stack-down/issues"
 [[mods]]
 modId="stackdown"
 version="${file.jarVersion}"
