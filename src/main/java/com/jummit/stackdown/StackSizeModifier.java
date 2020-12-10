@@ -21,17 +21,15 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 public class StackSizeModifier {
 	
 	private static final Logger LOGGER = LogManager.getLogger();
-
+	
 	private static final Map<Item, Integer> originalStackSizes = new HashMap<Item, Integer>();
-
+	
 	public static void init() {
-		Field maxStackSize = ObfuscationReflectionHelper.findField(Item.class, "field_77777_bU");
-		maxStackSize.setAccessible(true);
 		Registry.ITEM.forEach((item) -> {
 			originalStackSizes.put(item, item.getMaxStackSize());
 		});
 	}
-
+	
 	public static void modifyStackSizes() {
 		Field maxStackSize = ObfuscationReflectionHelper.findField(Item.class, "field_77777_bU");
 		Registry.ITEM.forEach((item) -> {
@@ -48,7 +46,7 @@ public class StackSizeModifier {
 			}
 		});
 	}
-
+	
 	private static int getModifiedStackSize(Item item) {
 		for (String config : StackDownConfig.COMMON.stackSizes.get()) {
 			Matcher matcher = Pattern.compile("^(.+)([*=+-/])(\\d+)$").matcher(config);
@@ -56,7 +54,7 @@ public class StackSizeModifier {
 				return StringOperaterUtils.calculate(originalStackSizes.get(item), Integer.parseInt(matcher.group(3)), matcher.group(2));
 			}
 		}
-
+		
 		String config = item instanceof BlockItem ? StackDownConfig.COMMON.blockStackSize.get() : StackDownConfig.COMMON.itemStackSize.get();
 		Matcher matcher = Pattern.compile("^([*+-/]?)(\\d+)$").matcher(config);
 		if (matcher.matches()) {
@@ -66,7 +64,7 @@ public class StackSizeModifier {
 				return StringOperaterUtils.calculate(originalStackSizes.get(item), Integer.parseInt(matcher.group(2)), matcher.group(1));
 			}
 		}
-
+		
 		return originalStackSizes.get(item);
 	}
 }
