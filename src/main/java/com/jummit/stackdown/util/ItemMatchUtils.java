@@ -11,9 +11,9 @@ import net.minecraft.util.ResourceLocation;
 public class ItemMatchUtils {
 	
 	public static Boolean match(String pattern, Item item, Map<Item, Integer> originalStackSizes) {
-		return NumberUtils.isCreatable(pattern) && originalStackSizes.get(item) == Integer.parseInt(pattern) ||
-				item.getRegistryName().getNamespace() == pattern ||
-				item.getRegistryName().toString() == pattern ||
+		return NumberUtils.isCreatable(pattern) && originalStackSizes.get(item).equals(Integer.parseInt(pattern)) ||
+				item.getRegistryName().getNamespace().equals(pattern) ||
+				item.getRegistryName().toString().equals(pattern) ||
 				ResourceLocation.isResouceNameValid(pattern) && item.getTags().contains(new ResourceLocation(pattern)) ||
 				pattern.startsWith("(") && pattern.endsWith(")") && Pattern.compile(pattern.substring(1, pattern.length() - 1)).matcher(item.getRegistryName().toString()).matches();
 	}
