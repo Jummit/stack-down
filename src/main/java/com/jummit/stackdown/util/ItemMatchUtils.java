@@ -14,7 +14,8 @@ public class ItemMatchUtils {
 		return NumberUtils.isCreatable(pattern) && originalStackSizes.get(item).equals(Integer.parseInt(pattern)) ||
 				item.getRegistryName().getNamespace().equals(pattern) ||
 				item.getRegistryName().toString().equals(pattern) ||
-				ResourceLocation.isResouceNameValid(pattern) && item.getTags().contains(new ResourceLocation(pattern)) ||
+				item.getTags().contains(ResourceLocation.tryCreate(pattern)) ||
 				pattern.startsWith("(") && pattern.endsWith(")") && Pattern.compile(pattern.substring(1, pattern.length() - 1)).matcher(item.getRegistryName().toString()).matches();
 	}
+
 }

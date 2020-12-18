@@ -48,14 +48,14 @@ public class StackSizeModifier {
 	}
 	
 	private static int getModifiedStackSize(Item item) {
-		for (String config : StackDownConfig.COMMON.stackSizes.get()) {
+		for (String config : StackDownConfig.SERVER.stackSizes.get()) {
 			Matcher matcher = Pattern.compile("^(.+)([*=+-/])(\\d+)$").matcher(config);
 			if (matcher.matches() && ItemMatchUtils.match(matcher.group(1), item, originalStackSizes)) {
 				return StringOperaterUtils.calculate(originalStackSizes.get(item), Integer.parseInt(matcher.group(3)), matcher.group(2));
 			}
 		}
 		
-		String config = item instanceof BlockItem ? StackDownConfig.COMMON.blockStackSize.get() : StackDownConfig.COMMON.itemStackSize.get();
+		String config = item instanceof BlockItem ? StackDownConfig.SERVER.blockStackSize.get() : StackDownConfig.SERVER.itemStackSize.get();
 		Matcher matcher = Pattern.compile("^([*+-/]?)(\\d+)$").matcher(config);
 		if (matcher.matches()) {
 			if (matcher.group(1).isEmpty()) {
