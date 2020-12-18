@@ -33,7 +33,7 @@ public class StackDownConfig {
 				.define("blockStackSize", "");
 			stackSizes = builder
 				.comment("A list of item patterns and their max stack size modifiers.\nPatterns can be items, mods, regular expressions surrounded by brackets, max stack sizes or tags.\nModifiers can be operators like +, -, * and / or an equal sign.")
-			.comment("Examples:\n[\n	minecraft:stone=64,\n	16=64,\n	forge:stone/32,\n	(diamond_.*)+30,\n	forestry-30\n]")
+			.comment("Examples:\n[\n	\"minecraft:stone=64\",\n	\"16=64\",\n	\"forge:stone/32\",\n	\"(diamond_.*)+30\",\n	\"forestry-30\"\n]")
 				.defineList("stackSizes", new ArrayList<String>(), s -> s instanceof String);
 		}
 	}
